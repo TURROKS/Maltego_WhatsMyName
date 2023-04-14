@@ -19,9 +19,17 @@ load_dotenv()
 urllib3.disable_warnings()
 
 
+# Get website logo for the new Entities
 def get_site_logo(domain_name):
     logo = f"https://logo.clearbit.com/{domain_name}"
     return logo
+
+
+# Normalize URL and extract Domain
+def domain_extract(input_url):
+    tld_result = tldextract.extract(input_url)
+    domain = f"{tld_result.domain}.{tld_result.suffix}"
+    return domain
 
 
 @registry.register_transform(display_name="Greet Person", input_entity="maltego.Phrase",
@@ -55,6 +63,7 @@ class AliasToSites(DiscoverableTransform):
     @classmethod
     def check_site(cls, site, person_name, response: MaltegoTransform):
 
+        # Load required variables
         user = os.getenv("USER")
         passwd = os.getenv("PASS")
         headers = {'User-Agent': os.getenv("USER_AGENT")}
@@ -62,11 +71,11 @@ class AliasToSites(DiscoverableTransform):
 
         # Normalize URL
         test_url = site.get('uri_check').replace('{account}', parse.quote_plus(person_name))
-        tld_result = tldextract.extract(test_url)
-        domain = f"{tld_result.domain}.{tld_result.suffix}"
+        domain = domain_extract(test_url)
 
         try:
-            r = requests.get(test_url.strip(), verify=False, timeout=5, headers=headers, proxies=proxies, auth=(user, passwd))
+            r = requests.get(test_url.strip(), verify=False, timeout=5, headers=headers, proxies=proxies,
+                             auth=(user, passwd))
 
             # Check if user exists on website
             if r.status_code == site.get('e_code') and r.text.find(site.get('e_string')) != -1:
@@ -80,8 +89,7 @@ class AliasToSites(DiscoverableTransform):
 
                         # Normalize pretty_uri
                         test_url = site.get('uri_pretty').replace('{account}', parse.quote_plus(person_name))
-                        tld_result = tldextract.extract(test_url)
-                        domain = f"{tld_result.domain}.{tld_result.suffix}"
+                        domain = domain_extract(test_url)
 
                         # Create Entity
                         ent = response.addEntity("maltego.OnlineGroup", site.get("name"))
