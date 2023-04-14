@@ -19,6 +19,11 @@ load_dotenv()
 urllib3.disable_warnings()
 
 
+def get_site_logo(domain_name):
+    logo = f"https://logo.clearbit.com/{domain_name}"
+    return logo
+
+
 @registry.register_transform(display_name="Greet Person", input_entity="maltego.Phrase",
                              description='Returns a Phrase greeting a Person on the Graph.',
                              output_entities=["maltego.Phrase"])
@@ -83,12 +88,12 @@ class AliasToSites(DiscoverableTransform):
                         ent.addProperty(fieldName='url', displayName='URL', matchingRule='loose', value=test_url)
                         ent.addProperty(fieldName='cat', displayName='Category', matchingRule='loose',
                                         value=str(site.get('cat')).upper())
-                        ent.setIconURL(f"https://logo.clearbit.com/{domain}")
+                        ent.setIconURL(get_site_logo(domain))
                     else:
                         # Create Entity
                         ent = response.addEntity("maltego.OnlineGroup", site.get("name"))
                         ent.addProperty(fieldName='url', displayName='URL', matchingRule='loose', value=r.url)
-                        ent.setIconURL(f"https://logo.clearbit.com/{domain}")
+                        ent.setIconURL(get_site_logo(domain))
                         ent.addProperty(fieldName='cat', displayName='Category', matchingRule='loose',
                                         value=str(site.get('cat')).upper())
             # Status code is correct but test string does not match
