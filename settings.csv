@@ -1,1 +1,2 @@
 Name,Type,Display,DefaultValue,Optional,Popup
+language,string,Language,en,True,Yes

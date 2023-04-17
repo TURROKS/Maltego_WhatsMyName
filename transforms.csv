@@ -1,2 +1,3 @@
 Owner,Author,Disclaimer,Description,Version,Name,UIName,URL,entityName,oAuthSettingId,transformSettingIDs,seedIDs
-ACME Corporation,John Doe <johndoe@acme.com>,,Returns a Phrase greeting a Person on the Graph.,0.1,aliastosites,Greet Person,https://transforms.acme.com/run/aliastosites,maltego.Phrase,,,demo
+Mario Rojas,Mario Rojas <mario.rojas-chinchilla@outlook.com>,,Returns a list of website where an Alias has been found,0.1,aliastosites,To Online Group [WhatsMyName],https://transforms.acme.com/run/aliastosites,maltego.Alias,,,demo
+Mario Rojas,Mario Rojas <mario.rojas-chinchilla@outlook.com>,,Returns the category of an Online Group.,0.1,sitetocategory,To Category [WhatsMyName],https://transforms.acme.com/run/sitetocategory,maltego.OnlineGroup,,language,demo

@@ -10,6 +10,7 @@ register_transform_classes(transforms)
 
 registry.write_transforms_config()
 registry.write_settings_config()
+registry.write_local_mtz("./WhatsMyName.mtz", command="./venv/bin/python3", debug=False)
 
 if __name__ == '__main__':
     handle_run(__name__, sys.argv, application)

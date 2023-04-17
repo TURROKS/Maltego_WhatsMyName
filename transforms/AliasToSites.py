@@ -1,5 +1,6 @@
 import os
 import requests
+from requests.auth import HTTPProxyAuth
 import threading
 import time
 from urllib import parse
@@ -8,7 +9,7 @@ import urllib3
 from dotenv import load_dotenv
 import tldextract
 
-from extensions import registry
+from extensions import registry, whatsmyname_set
 from maltego_trx.maltego import MaltegoMsg, MaltegoTransform
 from maltego_trx.transform import DiscoverableTransform
 
@@ -32,9 +33,10 @@ def domain_extract(input_url):
     return domain
 
 
-@registry.register_transform(display_name="Greet Person", input_entity="maltego.Phrase",
-                             description='Returns a Phrase greeting a Person on the Graph.',
-                             output_entities=["maltego.Phrase"])
+@registry.register_transform(display_name="To Online Group [WhatsMyName]", input_entity="maltego.Alias",
+                             description='Returns a list of website where an Alias has been found',
+                             output_entities=["maltego.OnlineGroup"],
+                             transform_set=whatsmyname_set)
 class AliasToSites(DiscoverableTransform):
 
     @classmethod
@@ -66,6 +68,7 @@ class AliasToSites(DiscoverableTransform):
         # Load required variables
         user = os.getenv("USER")
         passwd = os.getenv("PASS")
+        auth = HTTPProxyAuth(user, passwd)
         headers = {'User-Agent': os.getenv("USER_AGENT")}
         proxies = {'http': os.getenv("PROXY")}
 
@@ -74,11 +77,11 @@ class AliasToSites(DiscoverableTransform):
         domain = domain_extract(test_url)
 
         try:
-            r = requests.get(test_url.strip(), verify=False, timeout=5, headers=headers, proxies=proxies,
-                             auth=(user, passwd))
-
+            # r = requests.get(test_url.strip(), verify=False, timeout=5, headers=headers, proxies=proxies,
+            #                  auth=auth)
+            r = requests.get(test_url.strip(), verify=False, timeout=5, headers=headers)
             # Check if user exists on website
-            if r.status_code == site.get('e_code') and r.text.find(site.get('e_string')) != -1:
+            if r.status_code == site.get('e_code') and r.text.find(site.get('e_string')) != -1 and site.get('valid'):
 
                 # Remove False Positives
                 if person_name not in r.url:
@@ -96,6 +99,8 @@ class AliasToSites(DiscoverableTransform):
                         ent.addProperty(fieldName='url', displayName='URL', matchingRule='loose', value=test_url)
                         ent.addProperty(fieldName='cat', displayName='Category', matchingRule='loose',
                                         value=str(site.get('cat')).upper())
+                        ent.addDisplayInformation(content=f'<a href="{test_url}">Open in Browser</a>',
+                                                  title="Profile")
                         ent.setIconURL(get_site_logo(domain))
                     else:
                         # Create Entity
@@ -104,12 +109,15 @@ class AliasToSites(DiscoverableTransform):
                         ent.setIconURL(get_site_logo(domain))
                         ent.addProperty(fieldName='cat', displayName='Category', matchingRule='loose',
                                         value=str(site.get('cat')).upper())
+                        ent.addDisplayInformation(content=f'<a href="{test_url}">Open in Browser</a>',
+                                                  title="Profile")
             # Status code is correct but test string does not match
             elif r.status_code == site.get('e_code') and r.text.find(site.get('e_string')) == -1:
-                response.addUIMessage(f"Bad detection string {site.get('e_string')} for {domain}")
+                response.addUIMessage(f"Potential False Positive for {domain}")
             # Status code does not match but test string does
             elif not r.status_code == site.get('e_code') and r.text.find(site.get('e_string')) != -1:
                 response.addUIMessage(f"Response code received {r.status_code} expected {site.get('e_code')} for {domain}")
         # Other Exceptions
         except requests.exceptions.RequestException as e:
-            response.addUIMessage(f"Other error for {domain}")
+            # response.addUIMessage(f"Other error for {domain}")
+            pass

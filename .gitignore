@@ -12,6 +12,7 @@
 .idea/**/dictionaries
 .idea/**/shelf
 /misc/Tests/
+*.mtz
 
 # AWS User-specific
 .idea/**/aws.xml
