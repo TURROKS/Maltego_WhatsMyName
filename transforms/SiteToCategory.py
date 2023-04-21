@@ -7,7 +7,6 @@ from maltego_trx.transform import DiscoverableTransform
 
 @registry.register_transform(display_name="To Category [WhatsMyName]", input_entity="maltego.OnlineGroup",
                              description='Returns the category of an Online Group.',
-                             settings=[language_setting],
                              output_entities=["onlinegroup.Category"],
                              transform_set=whatsmyname_set)
 class SiteToCategory(DiscoverableTransform):

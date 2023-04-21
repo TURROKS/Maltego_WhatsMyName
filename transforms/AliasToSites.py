@@ -6,6 +6,7 @@ import time
 from urllib import parse
 import urllib3
 
+from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 import tldextract
 
@@ -80,6 +81,7 @@ class AliasToSites(DiscoverableTransform):
             # r = requests.get(test_url.strip(), verify=False, timeout=5, headers=headers, proxies=proxies,
             #                  auth=auth)
             r = requests.get(test_url.strip(), verify=False, timeout=5, headers=headers)
+            html = BeautifulSoup(r.text)
             # Check if user exists on website
             if r.status_code == site.get('e_code') and r.text.find(site.get('e_string')) != -1 and site.get('valid'):
 
@@ -97,11 +99,14 @@ class AliasToSites(DiscoverableTransform):
                         # Create Entity
                         ent = response.addEntity("maltego.OnlineGroup", site.get("name"))
                         ent.addProperty(fieldName='url', displayName='URL', matchingRule='loose', value=test_url)
+                        ent.setIconURL(get_site_logo(domain))
                         ent.addProperty(fieldName='cat', displayName='Category', matchingRule='loose',
                                         value=str(site.get('cat')).upper())
-                        ent.addDisplayInformation(content=f'<a href="{test_url}">Open in Browser</a>',
+                        ent.addProperty(fieldName='webTitle', displayName='Title', matchingRule='strict',
+                                        value=html.title.text)
+                        ent.addDisplayInformation(content=f'<b>{html.title.text}</b><br>'
+                                                          f'<a href="{test_url}">Open in Browser</a>',
                                                   title="Profile")
-                        ent.setIconURL(get_site_logo(domain))
                     else:
                         # Create Entity
                         ent = response.addEntity("maltego.OnlineGroup", site.get("name"))
@@ -109,7 +114,10 @@ class AliasToSites(DiscoverableTransform):
                         ent.setIconURL(get_site_logo(domain))
                         ent.addProperty(fieldName='cat', displayName='Category', matchingRule='loose',
                                         value=str(site.get('cat')).upper())
-                        ent.addDisplayInformation(content=f'<a href="{test_url}">Open in Browser</a>',
+                        ent.addProperty(fieldName='webTitle', displayName='Title', matchingRule='strict',
+                                        value=html.title.text)
+                        ent.addDisplayInformation(content=f'<b>{html.title.text}</b><br>'
+                                                          f'<a href="{test_url}">Open in Browser</a>',
                                                   title="Profile")
             # Status code is correct but test string does not match
             elif r.status_code == site.get('e_code') and r.text.find(site.get('e_string')) == -1:
