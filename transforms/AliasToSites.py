@@ -1,3 +1,4 @@
+import json
 import os
 import requests
 from requests.auth import HTTPProxyAuth
@@ -23,7 +24,16 @@ urllib3.disable_warnings()
 
 # Get website logo for the new Entities
 def get_site_logo(domain_name):
-    logo = f"https://logo.clearbit.com/{domain_name}"
+
+    if domain_name == "t.me":
+        logo = "https://logo.clearbit.com/telegram.org"
+    elif domain_name == "giters.com":
+        logo = "https://giters.com/images/favicon.svg"
+    elif domain_name == "ko-fi.com":
+        logo = "https://storage.ko-fi.com/cdn/brandasset/kofi_s_logo_nolabel.png"
+    else:
+        logo = f"https://logo.clearbit.com/{domain_name}"
+
     return logo
 
 

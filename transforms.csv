@@ -1,3 +1,4 @@
 Owner,Author,Disclaimer,Description,Version,Name,UIName,URL,entityName,oAuthSettingId,transformSettingIDs,seedIDs
 Mario Rojas,Mario Rojas <mario.rojas-chinchilla@outlook.com>,,Returns a list of website where an Alias has been found,0.1,aliastosites,To Online Group [WhatsMyName],https://transforms.acme.com/run/aliastosites,maltego.Alias,,,demo
+Mario Rojas,Mario Rojas <mario.rojas-chinchilla@outlook.com>,,Extracts the potential username from an Email address.,0.1,emailtoalias,To Alias [WhatsMyName],https://transforms.acme.com/run/emailtoalias,maltego.EmailAddress,,,demo
 Mario Rojas,Mario Rojas <mario.rojas-chinchilla@outlook.com>,,Returns the category of an Online Group.,0.1,sitetocategory,To Category [WhatsMyName],https://transforms.acme.com/run/sitetocategory,maltego.OnlineGroup,,,demo
