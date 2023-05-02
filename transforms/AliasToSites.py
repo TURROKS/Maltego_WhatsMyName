@@ -108,9 +108,9 @@ class AliasToSites(DiscoverableTransform):
 
                         # Create Entity
                         ent = response.addEntity("maltego.OnlineGroup", site.get("name"))
-                        ent.addProperty(fieldName='url', displayName='URL', matchingRule='loose', value=test_url)
+                        ent.addProperty(fieldName='url', displayName='URL', matchingRule='strict', value=test_url)
                         ent.setIconURL(get_site_logo(domain))
-                        ent.addProperty(fieldName='cat', displayName='Category', matchingRule='loose',
+                        ent.addProperty(fieldName='cat', displayName='Category', matchingRule='strict',
                                         value=str(site.get('cat')).upper())
                         ent.addProperty(fieldName='webTitle', displayName='Title', matchingRule='strict',
                                         value=html.title.text)
@@ -120,7 +120,7 @@ class AliasToSites(DiscoverableTransform):
                     else:
                         # Create Entity
                         ent = response.addEntity("maltego.OnlineGroup", site.get("name"))
-                        ent.addProperty(fieldName='url', displayName='URL', matchingRule='loose', value=r.url)
+                        ent.addProperty(fieldName='url', displayName='URL', matchingRule='strict', value=r.url)
                         ent.setIconURL(get_site_logo(domain))
                         ent.addProperty(fieldName='cat', displayName='Category', matchingRule='loose',
                                         value=str(site.get('cat')).upper())
