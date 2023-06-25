@@ -103,32 +103,30 @@ class AliasToSites(DiscoverableTransform):
                     if site.get('uri_pretty'):
 
                         # Normalize pretty_uri
-                        test_url = site.get('uri_pretty').replace('{account}', parse.quote_plus(person_name))
-                        domain = domain_extract(test_url)
+                        test_pretty_url = site.get('uri_pretty').replace('{account}', person_name)
+                        domain = domain_extract(test_pretty_url)
 
                         # Create Entity
                         ent = response.addEntity("maltego.OnlineGroup", site.get("name"))
-                        ent.addProperty(fieldName='url', displayName='URL', matchingRule='strict', value=test_url)
+                        ent.addProperty(fieldName='url', displayName='URL', matchingRule='strict', value=test_pretty_url)
                         ent.setIconURL(get_site_logo(domain))
-                        ent.addProperty(fieldName='cat', displayName='Category', matchingRule='strict',
-                                        value=str(site.get('cat')).upper())
-                        ent.addProperty(fieldName='webTitle', displayName='Title', matchingRule='strict',
-                                        value=html.title.text)
-                        ent.addDisplayInformation(content=f'<b>{html.title.text}</b><br>'
-                                                          f'<a href="{test_url}">Open in Browser</a>',
-                                                  title="Profile")
+                        ent.addProperty(fieldName='cat', displayName='Category', matchingRule='strict', value=str(site.get('cat')).upper())
+                        ent.addProperty(fieldName='webTitle', displayName='Title', matchingRule='strict', value=html.title.text)
+                        if html.title:
+                            ent.addDisplayInformation(content=f'<b>{html.title.text}</b><br><a href="{test_pretty_url}">Open in Browser</a>', title="Profile")
+                        else:
+                            ent.addDisplayInformation(content=f'<a href="{test_pretty_url}">Open in Browser</a>', title="Profile")
                     else:
                         # Create Entity
                         ent = response.addEntity("maltego.OnlineGroup", site.get("name"))
                         ent.addProperty(fieldName='url', displayName='URL', matchingRule='strict', value=r.url)
                         ent.setIconURL(get_site_logo(domain))
-                        ent.addProperty(fieldName='cat', displayName='Category', matchingRule='loose',
-                                        value=str(site.get('cat')).upper())
-                        ent.addProperty(fieldName='webTitle', displayName='Title', matchingRule='strict',
-                                        value=html.title.text)
-                        ent.addDisplayInformation(content=f'<b>{html.title.text}</b><br>'
-                                                          f'<a href="{test_url}">Open in Browser</a>',
-                                                  title="Profile")
+                        ent.addProperty(fieldName='cat', displayName='Category', matchingRule='loose', value=str(site.get('cat')).upper())
+                        ent.addProperty(fieldName='webTitle', displayName='Title', matchingRule='strict', value=html.title.text)
+                        if html.title:
+                            ent.addDisplayInformation(content=f'<b>{html.title.text}</b><br><a href="{r.url}">Open in Browser</a>', title="Profile")
+                        else:
+                            ent.addDisplayInformation(content=f'<a href="{r.url}">Open in Browser</a>', title="Profile")
             # Status code is correct but test string does not match
             elif r.status_code == site.get('e_code') and r.text.find(site.get('e_string')) == -1:
                 response.addUIMessage(f"Potential False Positive for {domain}")
