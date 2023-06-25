@@ -3,3 +3,4 @@ requests
 urllib3
 tldextract
 python-dotenv
+beautifulsoup4
