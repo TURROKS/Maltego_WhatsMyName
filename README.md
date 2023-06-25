@@ -1,7 +1,7 @@
 # Maltego WhatsMyName Transforms
 
-The Maltego WhatsMyName Transforms are based on the amazing [whatsmyname.app](https://whatsmyname.app/) tool
-that allows you to enumerate usernames across many websites.
+The Maltego WhatsMyName Transforms are based on the amazing [whatsmyname.app](https://whatsmyname.app/) tool 
+created by [Micah "WebBreacher" Hoffman](https://webbreacher.com/) that allows you to enumerate usernames across many websites.
 
 ![new_identity.png](misc/new_int.png)
 
