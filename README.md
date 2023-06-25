@@ -44,6 +44,11 @@ submenu, making them easier to find and use.
 If you are a more advanced user and want to manually add the Transforms to your client, you can follow this 
 [instructions](https://docs.maltego.com/support/solutions/articles/15000017605-local-transforms-example-#adding-the-transform-to-maltego-0-6)
 
+### OPSEC (Operational Security)
+
+Please also be aware that the requests generated to each website will be local requests, I highly recommend using a VPN 
+to protect your privacy and security.
+
 ## Disclaimer
 
 This tool is provided for educational purposes only. It is designed to promote understanding and learning of OSINT 
@@ -53,11 +58,6 @@ does not support or condone illegal or unethical actions.**
 The author is not responsible or liable for any misuse of this tool, including any damage, consequences, or violations 
 of laws or agreements resulting from the inappropriate use of this tool. **By using this tool, you agree to this 
 disclaimer and assume full responsibility for your actions.**
-
-### OPSEC (Operational Security)
-
-Please also be aware that the requests generated to each website will be local requests, I highly recommend using a VPN 
-to protect your privacy and security.
 
 Happy OSINTing!
 
