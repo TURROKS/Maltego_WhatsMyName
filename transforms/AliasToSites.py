@@ -93,7 +93,7 @@ class AliasToSites(DiscoverableTransform):
             r = requests.get(test_url.strip(), verify=False, timeout=5, headers=headers)
             html = BeautifulSoup(r.text)
             # Check if user exists on website
-            if r.status_code == site.get('e_code') and r.text.find(site.get('e_string')) != -1 and site.get('valid'):
+            if r.status_code == site.get('e_code') and r.text.find(site.get('e_string')) != -1:
 
                 # Remove False Positives
                 if person_name not in r.url:
